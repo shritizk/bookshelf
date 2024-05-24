@@ -4,6 +4,7 @@ mongoose.connect('mongodb+srv://shritizkumar:1234@cluster0.3vv4wem.mongodb.net/b
 
 const courseSchema = new mongoose.Schema(
     {
+        _id : Number, 
         name : String
     }
 );

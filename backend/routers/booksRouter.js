@@ -1,8 +1,9 @@
-const { Router } = require("express");
+const {Router} = require('express');
+const router = Router();
 const { bookDB } = require("../DB/books");
 
 
-Router.post('/addBook',async function(req,res){
+router.post('/addBook',async function(req,res){
     try{
         const book = req.body;
     const bookDetails = await  bookDB.findOne({    
@@ -38,5 +39,5 @@ Router.post('/addBook',async function(req,res){
 })
 
 module.exports = {
-    bookRouter : Router
+    bookRouter : router
 }

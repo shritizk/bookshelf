@@ -1,15 +1,15 @@
 // it will check if book that student asked for is available or not 
 
-import { bookDB } from "../DB/books";
+const  { bookDB }  = require( "../DB/books");
 
-export async function availability(req,res,next){
+async function availability(req,res,next){
 
      try{
         const book_name = req.body.book_name;
     // find book in shelf
     const bookPayload =await  bookDB.findOne({ book_name});
 
-    if(bookPayload.count >0){
+    if(bookPayload.count > 0){
         next()
     }
 
@@ -24,4 +24,8 @@ export async function availability(req,res,next){
         })
      }
 
+}
+
+module.exports = {
+    availability
 }

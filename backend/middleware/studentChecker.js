@@ -1,8 +1,8 @@
-import { studentDB } from "../DB/student";
+const { studentDB } = require("../DB/student")
 
-export function studentChecker(req,res,next){
+async function studentChecker(req,res,next){
     const  studentid = req.body.id;
-    if(studentDB.find({
+    if(await  studentDB.findOne({
         studentid
     })){
         res.status(403).json({
@@ -16,9 +16,9 @@ export function studentChecker(req,res,next){
 
 
 // checks if student already have a book
-export function assighChecker(req,res,next){
+async function assighChecker(req,res,next){
     const  studentid = req.body.id;
-    const studentDetails   = studentDB.findOne({
+    const studentDetails   = await studentDB.findOne({
         _id : studentid
     })
     if(studentDetails.assign === false){
@@ -32,9 +32,9 @@ export function assighChecker(req,res,next){
 
 // check if its not false
 
-export function falseassighChecker(req,res,next){
+async  function falseassighChecker(req,res,next){
     const  studentid = req.body.id;
-    const studentDetails   = studentDB.findOne({
+    const studentDetails   = await studentDB.findOne({
         _id : studentid
     })
     if(studentDetails.assign === false){
@@ -47,4 +47,6 @@ export function falseassighChecker(req,res,next){
 }
 
 
-
+module.exports = {
+    studentChecker , falseassighChecker ,  assighChecker
+}

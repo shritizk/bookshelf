@@ -7,7 +7,7 @@ const student = new mongoose.Schema({
     _id : Number,
     name : String , 
     courseassociated: {type : mongoose.Schema.Types.ObjectId , ref : courseDB ,default : ''},
-    assign : String | Boolean
+    assign : String || Boolean
     
 })
 

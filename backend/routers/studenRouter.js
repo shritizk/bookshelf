@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const router = Router();
 const { studentDB } = require("../DB/student");
 const { courseDB } = require("../DB/course");
 const { studentChecker, assighChecker, falseassighChecker } = require("../middleware/studentChecker");
@@ -7,27 +8,33 @@ const { bookDB } = require("../DB/books");
 
 // ADD student 
 
-Router.post("/registerStudent", studentChecker ,async function(req,res){
-    const {id , name , course }  = req.body.id;
-    const course_id = courseDB.findOne({
-        course
-    })
+router.post("/registerStudent" ,async function(req,res){
     
     
-    const  newData = await new studentDB({
-        _id : id,
-        name : name , 
-        courseassociated : course_id._id,
-        assign: false
-    })
-    newData.save()
+    try{const details  = req.body;
+    const courseId = courseDB.findOne({name : details.course});
+    await studentDB.create({
+        _id : details.studentId , 
+        name : details.studentName , 
+        courseassociated :  courseId._id , 
+        assign : false
+    }).then(()=>{
+        res.json({
+            msg:"student data inserted"
+        })
+    })}catch{
+        res.json({
+            msg:"something went wrong"
+        })
+    }
 
+   
 })
 
 
 // assigh student a book
 
-Router.put('/assign',availability,assighChecker,async function(req,res){
+router.put('/assign',availability,assighChecker,async function(req,res){
     try{
         const {
             studentid , bookId
@@ -66,7 +73,7 @@ Router.put('/assign',availability,assighChecker,async function(req,res){
 
 // submit book
 
-Router.post('/submit',falseassighChecker,async function(req,res){
+router.post('/submit',falseassighChecker,async function(req,res){
    try{
     const { studentId ,  bookId} = req.body;
     const studentDetails = studentDB.updateOne({
@@ -96,7 +103,7 @@ Router.post('/submit',falseassighChecker,async function(req,res){
 })
 
 module.exports = {
-    studentRouter : Router
+    studentRouter : router
 }
 
 
