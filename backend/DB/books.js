@@ -6,8 +6,9 @@ mongoose.connect('mongodb+srv://shritizkumar:1234@cluster0.3vv4wem.mongodb.net/b
 
 const bookSchema = new mongoose.Schema({
     name : String , 
-    courseassociated: {type : mongoose.Schema.Types.ObjectId , ref : courseDB }
-
+    courseassociated: {type : mongoose.Schema.Types.ObjectId , ref : courseDB },
+    availability : Boolean,
+    count : Number
 });
 
 const bookDB = mongoose.model('books', bookSchema);
