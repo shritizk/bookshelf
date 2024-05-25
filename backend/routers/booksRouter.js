@@ -1,41 +1,29 @@
 const {Router} = require('express');
 const router = Router();
 const { bookDB } = require("../DB/books");
+const { bookInIt } = require('../middleware/bookavailability');
 
 
-router.post('/addBook',async function(req,res){
-    try{
-        const book = req.body;
-    const bookDetails = await  bookDB.findOne({    
-        _id : book.bookId , name : book.name 
-        
-    }).then((e)=>{  
-        if(e){
-            e.count+book.count
-            e.save()
-        }
-        else{
-            const bookDetials = new bookDB({
-                _id : book.bookid , 
-                name : book.name , 
-                availability : true , 
-                count : book.count
+router.post('/addBook',bookInIt,async function(req,res){
 
-            })
-            bookDetails.save()
-            res.json({
-                msg : "book added"
-            })
-        }
-    }
-    )  
-
-
-    }catch{
+    //  name  : String  , courseassociated # you have ti get its  from courseDB , count 
+    try { 
+        const Details = req.body;
+    
+    await bookDB.create({
+        name : Details.name , courseassociated : Details.course , count : Details.count
+    })
+    res.json({
+        msg : " book added"
+    })
+    }catch { 
         res.json({
-            msg:"something went wrong"
+            msg : "something went wrong"
         })
     }
+    
+
+
 })
 
 module.exports = {

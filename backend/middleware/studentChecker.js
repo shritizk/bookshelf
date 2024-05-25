@@ -1,12 +1,16 @@
+const { bookDB } = require("../DB/books");
 const { studentDB } = require("../DB/student")
 
 async function studentChecker(req,res,next){
-    const  studentid = req.body.id;
-    if(await  studentDB.findOne({
-        studentid
-    })){
-        res.status(403).json({
-            msg:"student already registered!"
+    // studentId
+    //this will check if student exist if yes then it will send next
+    const  {studentid} = req.body;
+    const result = studentDB.findOne({
+        studentId : studentid
+    })
+    if(result != null){
+        res.json({
+            msg : "student already exist"
         })
     }
 
@@ -15,38 +19,38 @@ async function studentChecker(req,res,next){
 
 
 
-// checks if student already have a book
-async function assighChecker(req,res,next){
-    const  studentid = req.body.id;
-    const studentDetails   = await studentDB.findOne({
-        _id : studentid
+
+
+
+
+
+
+
+
+
+
+//this is check if student already exist or not , if yes it will throw a error else it will send next()
+async function studentUniqueFinder(req,res,next){
+    const details = req.body
+    const studentData = await studentDB.exists({
+        studentid : details.rollNumber
+    }).then((err ,doc )=>{
+        
+        
+        if (err === null){
+            next()
+        }else{
+            return res.json({
+                masg:"student already registered"
+            })
+        }
     })
-    if(studentDetails.assign === false){
-        next()
-    }
-    res.status(407).json({
-        msg:"pls submit old assign book"
-    })
+    
 
-}
 
-// check if its not false
-
-async  function falseassighChecker(req,res,next){
-    const  studentid = req.body.id;
-    const studentDetails   = await studentDB.findOne({
-        _id : studentid
-    })
-    if(studentDetails.assign === false){
-        res.status(407).json({
-            msg:"no book assigned"
-        })
-    }
-    next()
-
-}
+}   
 
 
 module.exports = {
-    studentChecker , falseassighChecker ,  assighChecker
+    studentChecker ,  studentUniqueFinder
 }

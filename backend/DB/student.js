@@ -4,15 +4,15 @@ mongoose.connect('mongodb+srv://shritizkumar:1234@cluster0.3vv4wem.mongodb.net/b
 
 
 const student = new mongoose.Schema({
-    _id : Number,
+    studentid: Number , 
     name : String , 
-    courseassociated: {type : mongoose.Schema.Types.ObjectId , ref : courseDB ,default : ''},
-    assign : String || Boolean
+    courseassociated: String,
+    assign :{ type :  String  , default : false} 
     
 })
 
 
-const studentDB = new mongoose.model('student' , student)
+const studentDB = new mongoose.model('students' , student)
 
 module.exports = {
     studentDB

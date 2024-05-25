@@ -1,29 +1,24 @@
 const {Router} = require('express');
-const { courseDB } = require('../DB/course');
 const router = Router();
+const { courseDB } = require('../DB/course');
+const { courseFinder } = require('../middleware/courseFinedr');
  
-
-
-
-
 //ADD course
 
-router.post('/addcourse',async function(req,res){
-
+router.post('/addcourse',courseFinder,async function(req,res){
+    // takes { name  : String in body }
+    
     try{
         const  courseDetials = req.body;
-    if(!(await courseDB.findOne({
-        name : courseDetials
-    }))){
-        await courseDB.create({
-            name : courseDetials
-        })        
-    }
-    else{
-        res.json({
-            msg : "already exist"
+        
+      
+        courseDB.create({
+            name : courseDetials.name
         })
-    }
+
+        res.json({
+            msg : "course created"
+        })
 
     }catch{
         res.json({
@@ -34,6 +29,6 @@ router.post('/addcourse',async function(req,res){
 
 module.exports = {
     courseRouter : router
-
 }
+
 
